@@ -35,6 +35,7 @@ namespace VelinoStudio.Updater
                     versionSB.AppendLine(versionInfo.UpdateDescribe);
                     versionSB.AppendLine();
                     versionSB.AppendLine("===============================");
+                    Common.WriteLog("获取服务器版本信息：{0}\t{1}", versionInfo.Version, versionInfo.UpdateDescribe);
                     for (int versionIndex = _UpdateInfo.VersionInfos.Length - 2; versionIndex >= 0; versionIndex--)
                     {
                         versionSB.AppendLine();
@@ -43,8 +44,10 @@ namespace VelinoStudio.Updater
                         versionSB.AppendLine(_UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
                         versionSB.AppendLine();
                         versionSB.AppendLine("===============================");
+                        Common.WriteLog("获取服务器版本信息：{0}\t{1}", _UpdateInfo.VersionInfos[versionIndex].Version, _UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
                     }
                     _VersionHistory = versionSB.ToString();
+                    
                 }
             }
         }
@@ -60,21 +63,21 @@ namespace VelinoStudio.Updater
                 switch (updateArgs.UpdateState)
                 {
                     case UpdateState.Find:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb1");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb1");
                     case UpdateState.Updating:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb2");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb2");
                     case UpdateState.BeginDownload:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb3");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb3");
                     case UpdateState.Downloading:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb4");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb4");
                     case UpdateState.Downloaded:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb5");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb5");
                     case UpdateState.Finish:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb6");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb6");
                     case UpdateState.Cancel:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb7");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb7");
                     case UpdateState.Rollback:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fb8");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fb8");
                 }
             }
 
@@ -122,6 +125,7 @@ namespace VelinoStudio.Updater
             {
                 if (Common.CheckFileIsUpdate(updateFileInfo))
                 {
+                    Common.WriteLog_Warning("文件 {0} 需要更新", updateFileInfo.FilePath);
                     needUpdate.Add(updateFileInfo);
                 }
             }
@@ -133,6 +137,7 @@ namespace VelinoStudio.Updater
         protected internal virtual void OnErrorUpdate()
         {
             beginUpdate = false;
+            Common.WriteLog_Warning("更新发生错误");
             DialogResult = DialogResult.Abort;
         }
         /// <summary>
@@ -141,6 +146,7 @@ namespace VelinoStudio.Updater
         protected internal virtual void OnFinishUpdate()
         {
             beginUpdate = false;
+            Common.WriteLog_Information("更新完成");
             DialogResult = DialogResult.OK;
         }
         /// <summary>
@@ -158,10 +164,12 @@ namespace VelinoStudio.Updater
         protected internal virtual void OnRollbackUpdate()
         {
             string exceptionMessage = this.Exception.Message;
+            Common.WriteLog_Warning("开始更新回滚");
             bool result = false;
             foreach (KeyValuePair<string, string> keyValue in UpdateBackupFile)
             {
                 OnUpdateProgressing(new UpdateArgs(UpdateState.Rollback, new UpdateFileInfo() { FilePath = keyValue.Key }, -1, -1));
+                Common.WriteLog_Warning("开始回滚文件：{0}，备份位置：{1}", keyValue.Key, keyValue.Value);
                 if (File.Exists(keyValue.Value))
                 {
                     File.Delete(keyValue.Key);
@@ -172,10 +180,12 @@ namespace VelinoStudio.Updater
                             File.Move(keyValue.Value, keyValue.Key);
                             if (File.Exists(keyValue.Key))
                             {
+                                Common.WriteLog_Warning("文件 {0} 回滚成功", keyValue.Key);
                                 result = true;
                             }
                             else
                             {
+                                Common.WriteLog_Warning("文件 {0} 回滚失败，备份文件无法移动到原位", keyValue.Key);
                                 exceptionMessage += $"{Environment.NewLine}更新回滚失败！可能需要重新安装！{Environment.NewLine}错误代码：0x0f07";
                                 break;
                             }
@@ -189,22 +199,25 @@ namespace VelinoStudio.Updater
                     }
                     else
                     {
+                        Common.WriteLog_Warning("文件 {0} 回滚失败，新文件无法删除", keyValue.Key);
                         exceptionMessage += $"{Environment.NewLine}更新回滚失败！可能需要重新安装！{Environment.NewLine}错误代码：0x0f05";
                         break;
                     }
                 }
                 else
                 {
+                    Common.WriteLog_Warning("文件 {0} 回滚失败，备份文件不存在", keyValue.Key);
                     exceptionMessage += $"{Environment.NewLine}更新回滚失败！可能需要重新安装！{Environment.NewLine}错误代码：0x0f06";
                     break;
                 }
             }
+            OnUpdateProgressing(new UpdateArgs(UpdateState.Rollbacked, null, -1, -1));
             if (result)
             {
                 exceptionMessage += $"{Environment.NewLine}当前更新已回滚";
             }
             this.Exception = new Exception(exceptionMessage);
-            OnUpdateProgressing(new UpdateArgs(UpdateState.Rollback, null, -1, -1));
+            OnUpdateProgressing(new UpdateArgs(UpdateState.RollbackFailed, null, -1, -1));
         }
 
 
@@ -215,11 +228,13 @@ namespace VelinoStudio.Updater
         {
             try
             {
+                
                 UpdateBackupFile = new Dictionary<string, string>();
                 UpdateFileInfo currentFileInfo = null;
                 beginUpdate = true;
                 if (needUpdateFile != null && needUpdateFile.Length > 0)
                 {
+                    Common.WriteLog_Information("开始更新进程，需要更新的文件数量：{0}", needUpdateFile.Length);
                     int thisFileIndex = 1;
 
                     download.Downloading += (s, e) =>
@@ -265,7 +280,7 @@ namespace VelinoStudio.Updater
             catch (Exception ex)
             {
                 beginUpdate = false;
-                this.Exception = new Exception(ex.Message + Environment.NewLine + "错误代码：0x0f02");
+                this.Exception = Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0f02");
                 OnUpdateProgressing(new UpdateArgs(UpdateState.Error, null, needUpdateFile.Length, -1));
                 OnRollbackUpdate();
             }

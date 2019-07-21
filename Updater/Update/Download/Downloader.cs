@@ -19,11 +19,11 @@ namespace VelinoStudio.Updater.Download
                 switch (downloadInfo.DownloadState)
                 {
                     case DownloadState.BeginDownload:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fa1");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fa1");
                     case DownloadState.Downloading:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fa2");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fa2");
                     case DownloadState.Downloaded:
-                        throw new Exception(ex.Message + Environment.NewLine + "错误代码：0x0fa3");
+                        throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0fa3");
                 }
             }
         }
@@ -31,6 +31,7 @@ namespace VelinoStudio.Updater.Download
         {
             string directory = Path.GetDirectoryName(localFile);
             //Console.WriteLine($"下载路径：{url}，本地路径：{directory}，文件名：{Path.GetFileName(localFile)}");
+            Common.WriteLog_Information("下载路径：{0}，本地路径：{1}，文件名：{2}", url, directory, Path.GetFileName(localFile));
             bool success = false;
             FileStream writeStream = null;
             Stream readStream = null;
@@ -38,6 +39,7 @@ namespace VelinoStudio.Updater.Download
             if (File.Exists(localFile))
             {
                 File.Move(localFile, backupFile);
+                Common.WriteLog_Information("备份文件：{0} => {1}", localFile, backupFile);
             }
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
             writeStream = new FileStream(localFile, FileMode.Create);
@@ -78,7 +80,7 @@ namespace VelinoStudio.Updater.Download
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message+Environment.NewLine+"错误代码：0x0f01");
+                throw Common.Exception<Exception>(ex.Message + Environment.NewLine + "错误代码：0x0f01");
             }
             finally
             {

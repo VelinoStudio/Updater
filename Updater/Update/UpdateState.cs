@@ -41,7 +41,11 @@
         /// <summary>
         /// 更新发生错误
         /// </summary>
-        Error = 512
+        Error = 512,
+        /// <summary>
+        /// 回滚失败
+        /// </summary>
+        RollbackFailed = 1024
     }
    
 }
