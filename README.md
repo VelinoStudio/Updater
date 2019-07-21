@@ -19,7 +19,7 @@ Updater.UpdateProgressing事件与更新窗体中的UpdateProgressing事件功�
 
 UpdaterUI用于制作更新的配置文件，通过该程序的配置文件，可以指定哪些文件或哪些目录下的文件（不包含子目录）使用MD5校验的方式更新，方便更新一些不包含文件版本的文件，比如文本类型的配置文件或图片。
 配置文件中设置如下，需要的请自行添加，理论上可以有无限多个。但是使用MD5校验方式更新会影响更新的效率，建议不要太多。
-
+```xml
 
 <appSettings>
     <add key="MD5Hash_File_1" value="文件1"/>
