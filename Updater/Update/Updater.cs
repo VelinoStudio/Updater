@@ -14,7 +14,7 @@ namespace VelinoStudio.Updater
         private string updateConfig = string.Empty;
         private UpdateInfo updateInfo;
         Downloader download = new Downloader();
-        public bool Debug { get { return Common.Debug; } set { Debug = value; } }
+        public bool Debug { get { return Common.Debug; } set { Common.Debug = value; } }
 
         public Updater(string updateUrl, string updateConfig)
         {
@@ -31,7 +31,7 @@ namespace VelinoStudio.Updater
             string[] files = Directory.GetFiles(directory, "*.ekeYnB.*");
             foreach (string file in files)
             {
-                Common.WriteLog("清理旧文件 {0}", file);
+                Common.WriteLog_Information("清理旧文件 {0}", file);
                 File.Delete(file);
             }
 
@@ -50,6 +50,7 @@ namespace VelinoStudio.Updater
             }
             catch(Exception ex)
             {
+                Common.WriteLog_Error(ex);
                 throw ex;
             }
             
@@ -59,7 +60,7 @@ namespace VelinoStudio.Updater
             ClearOldFile(Environment.CurrentDirectory);
             bool result = false;
             string tempUpdateConfigFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".json");
-            Common.WriteLog("配置文件临时路径：{0}", tempUpdateConfigFile);
+            Common.WriteLog_Information("配置文件临时路径：{0}", tempUpdateConfigFile);
             try
             {
                 string url = string.Empty;
@@ -92,7 +93,7 @@ namespace VelinoStudio.Updater
                 {
                     using (UpdateForm updateForm = new T())
                     {
-                        Common.WriteLog("实例化更新窗体，窗体类型：{0}", typeof(T).AssemblyQualifiedName);
+                        Common.WriteLog_Information("实例化更新窗体，窗体类型：{0}", typeof(T).AssemblyQualifiedName);
                         updateForm.UpdateProgressing += (s, e) =>
                         {
                             try

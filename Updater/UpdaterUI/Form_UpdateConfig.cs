@@ -148,5 +148,14 @@ namespace VelinoStudio.Updater.UpdaterUI
             Form_BuildConfig form = new Form_BuildConfig(updateInfo);
             form.ShowDialog();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            Updater updater = new Updater("HTTP://mc.velino.lygxhsd.com/soft/ERPBrowser", "update.json");
+            updater.Debug = true;
+            updater.CheckUpdate(this);
+
+        }
     }
 }

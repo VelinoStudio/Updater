@@ -35,7 +35,7 @@ namespace VelinoStudio.Updater
                     versionSB.AppendLine(versionInfo.UpdateDescribe);
                     versionSB.AppendLine();
                     versionSB.AppendLine("===============================");
-                    Common.WriteLog("获取服务器版本信息：{0}\t{1}", versionInfo.Version, versionInfo.UpdateDescribe);
+                    Common.WriteLog_Information("获取服务器版本信息：{0}\t{1}", versionInfo.Version, versionInfo.UpdateDescribe);
                     for (int versionIndex = _UpdateInfo.VersionInfos.Length - 2; versionIndex >= 0; versionIndex--)
                     {
                         versionSB.AppendLine();
@@ -44,7 +44,7 @@ namespace VelinoStudio.Updater
                         versionSB.AppendLine(_UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
                         versionSB.AppendLine();
                         versionSB.AppendLine("===============================");
-                        Common.WriteLog("获取服务器版本信息：{0}\t{1}", _UpdateInfo.VersionInfos[versionIndex].Version, _UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
+                        Common.WriteLog_Information("获取服务器版本信息：{0}\t{1}", _UpdateInfo.VersionInfos[versionIndex].Version, _UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
                     }
                     _VersionHistory = versionSB.ToString();
                     

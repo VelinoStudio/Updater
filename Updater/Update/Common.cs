@@ -15,7 +15,6 @@ namespace VelinoStudio.Updater
         {
             bool result = false;
             //Console.WriteLine($"文件名：{updateFileInfo.FileName}，路径：{updateFileInfo.FilePath}，版本：{updateFileInfo.FileVersion}，大小：{updateFileInfo.FileSize}，MD5：{updateFileInfo.MD5HashStr}，检测方式：{updateFileInfo.VerificationType}");
-            WriteLog_Information("检查文件更新，文件：{0}，路径{1}，大小：{2}，服务器版本：{3}，本地版本：{4}");
             string checkFile = Path.Combine(Environment.CurrentDirectory, updateFileInfo.FilePath);
             if (File.Exists(checkFile))
             {
@@ -62,7 +61,7 @@ namespace VelinoStudio.Updater
             return result;
         }
 
-        internal static void WriteLog(string format, params object[] args)
+        static void WriteLog(string format, params object[] args)
         {
             if (!Debug) return;
             string logDir = AppDomain.CurrentDomain.BaseDirectory + @"UpdateLog\";
@@ -87,11 +86,12 @@ namespace VelinoStudio.Updater
         internal static void WriteLog_Error(Exception ex, string format, params object[] args)
         {
             StringBuilder exceptionMessage = new StringBuilder();
-            string[] exceptionMessages = ex.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string sm in exceptionMessages)
+            string[] sms = ex.ToString().Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            exceptionMessage.AppendLine(sms[0]);
+            for (int i = 1; i < sms.Length; i++)
             {
-                exceptionMessage.Append(' ', 9);
-                exceptionMessage.AppendLine($"\t{sm}");
+                exceptionMessage.Append(' ', 24);
+                exceptionMessage.AppendLine($"\t{sms[i]}");
             }
             if (!string.IsNullOrWhiteSpace(format) && args != null)
             {
