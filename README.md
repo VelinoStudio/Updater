@@ -81,14 +81,14 @@ public partial class Form_FindedUpdate : XtraForm, IUpdateForm
                     break;
                 case UpdateState.Finish:
                     this.Text = "完成更新！";
-                    button3.Text = $"完成更新";
+                    button3.Text = "完成更新";
                     button1.Enabled = button1.Visible = false;
                     button2.Enabled = button2.Visible = false;
                     button3.Enabled = button3.Visible = true;
                     break;
                 case UpdateState.Rollbacked:
-                    this.Text = $"回滚完成，关闭更新界面查看错误信息！";
-                    button3.Text = $"关闭";
+                    this.Text = "回滚完成，关闭更新界面查看错误信息！";
+                    button3.Text = "关闭";
                     button1.Enabled = button1.Visible = false;
                     button2.Enabled = button2.Visible = false;
                     button3.Enabled = button3.Visible = false;
