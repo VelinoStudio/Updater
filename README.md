@@ -7,9 +7,9 @@ Updater updater = new Updater(HTTP链接, 更新配置文件);
 （更新配置文件中记录的是相对路径，HTTP链接应该是程序的根目录，更新配置文件也需要在这个目录中）
 
 
-updater.CheckUpdate(Form)；
+updater.CheckUpdate(Form,out config)；
 （这个方法唯一的参数是父窗体，使用时可以阻止父窗体被点击到。可以使用单独的线程运行，不会影响到父窗口内代码的运行，而同时又确保不会点击到父窗口。
-该方法有一个重载，CheckUpdate<T>（Form），使用这个重载方法可以可以使用自定义的更新窗体，这个自定义的窗体必须继承于"UpdateForm"，"UpdateForm"使用了IUpdateForm接口。继承了"UpdateForm"，可以使用UpdateProgressing事件获取更新过程中的各种事件。）
+该方法有一个重载，CheckUpdate<T>（Form,out config），使用这个重载方法可以可以使用自定义的更新窗体，这个自定义的窗体必须继承于"UpdateForm"，"UpdateForm"使用了IUpdateForm接口。继承了"UpdateForm"，可以使用UpdateProgressing事件获取更新过程中的各种事件。）
   
 Updater.UpdateProgressing事件与更新窗体中的UpdateProgressing事件功能相同。
 
