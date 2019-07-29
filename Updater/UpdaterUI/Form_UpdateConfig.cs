@@ -53,7 +53,6 @@ namespace VelinoStudio.Updater.UpdaterUI
                         {
                             MD5Hashs.Add(file.ToLower());
                         }
-
                     }
                     else if (key.StartsWith("MD5Hash_Directory_"))
                     {
@@ -99,6 +98,7 @@ namespace VelinoStudio.Updater.UpdaterUI
             foreach (FileInfo chlFile in chldFiles)
             {
                 FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(chlFile.FullName);
+
                 UpdateFileInfo fileInfo = new UpdateFileInfo
                 {
                     FileName = chlFile.Name,
@@ -109,14 +109,45 @@ namespace VelinoStudio.Updater.UpdaterUI
                     VerificationType = MD5Hashs.Contains(chlFile.FullName.ToLower()) ? VerificationType.MD5Hash : VerificationType.Version
                 };
 
-                fileinfos.Add(fileInfo);
+                string config = string.Empty;
+
+                if (chlFile.Name.ToLower().EndsWith("exe.config"))
+                {
+                    if (MainExe.ToLower() + ".config" == chlFile.Name.ToLower())
+                    {
+                        config = $"(配置文件，已忽略，配置项已记录)";
+                        ExeConfigurationFileMap fileMap = new ExeConfigurationFileMap()
+                        {
+                            ExeConfigFilename = chlFile.FullName
+                        };
+                        Configuration configuration = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+                        Dictionary<string, string> dictionary = new Dictionary<string, string>();
+                        foreach (var kv in configuration.AppSettings.Settings.AllKeys)
+                        {
+                            dictionary.Add(kv, configuration.AppSettings.Settings[kv].Value);
+                        }
+                        updateInfo.Configurations = dictionary;
+                    }
+                    else
+                    {
+                        config = $"(配置文件，已忽略)";
+                    }
+                }
+                else
+                {
+                    fileinfos.Add(fileInfo);
+                }
+
+
+
                 TreeNode chldNode = new TreeNode();
                 string verification = string.Empty;
                 if (fileInfo.VerificationType == VerificationType.MD5Hash)
                 {
                     verification = $":{fileInfo.MD5HashStr}";
                 }
-                chldNode.Text = $"{chlFile.Name} ({fileInfo.FileVersion})({fileInfo.VerificationType}{verification})";
+                string nodeText = !string.IsNullOrWhiteSpace(config) ? config : $"({fileInfo.FileVersion})({fileInfo.VerificationType}{verification})";
+                chldNode.Text = $"{chlFile.Name} {nodeText}";
                    chldNode.Tag = fileInfo;
                 
                 treeView1.Invoke(new Action(delegate
