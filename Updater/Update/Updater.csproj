@@ -60,12 +60,6 @@
       <DependentUpon>Form_FindedUpdate.cs</DependentUpon>
     </Compile>
     <Compile Include="IUpdateForm.cs" />
-    <Compile Include="UpdateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UpdateForm.Designer.cs">
-      <DependentUpon>UpdateForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UpdateState.cs" />
     <Compile Include="UpdateArgs.cs" />
     <Compile Include="UpdateInformation\UpdateFileInfo.cs" />

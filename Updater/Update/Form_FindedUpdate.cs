@@ -1,11 +1,28 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using VelinoStudio.Updater.UpdateInformation;
 
 namespace VelinoStudio.Updater
 {
-    public partial class Form_FindedUpdate : UpdateForm
+
+    public partial class Form_FindedUpdate : Form, IUpdateForm
     {
         bool finish = false;
         bool error = false;
+
+        public UpdateInfo UpdateInfo { get; set; }
+        public string VersionHistory { get; set; }
+        public UpdateFileInfo[] NeedUpdateFile { get; set; }
+        public Func<Dictionary<string, string>> BackupFile { get; set; }
+        public Action OnErrorUpdate { get; set; }
+        public Action OnFinishUpdate { get; set; }
+        public Action OnCancelUpdate { get; set; }
+        public Action OnRollbackUpdate { get; set; }
+        public Action OnBeginUpdate { get; set; }
+
+   
+
         public Form_FindedUpdate()
         {
             InitializeComponent();
@@ -14,9 +31,9 @@ namespace VelinoStudio.Updater
         private void Form_FindedUpdate_Load(object sender, EventArgs f)
         {
             richTextBox1.Text = VersionHistory;
-            UpdateProgressing += Form_FindedUpdate_UpdateProgressing;
 
-            progressBar1.Maximum = needUpdateFile.Length;
+
+            progressBar1.Maximum = NeedUpdateFile.Length;
             progressBar1.Step = 1;
             progressBar1.Minimum = 0;
             progressBar1.Value = 0;
@@ -28,7 +45,7 @@ namespace VelinoStudio.Updater
             progressBar2.Visible = true;
         }
 
-        private void Form_FindedUpdate_UpdateProgressing(object sender, UpdateArgs e)
+        public void UpdateProgressingCallBack(UpdateArgs e)
         {
             switch (e.UpdateState)
             {

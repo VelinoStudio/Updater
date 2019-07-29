@@ -54,11 +54,11 @@ namespace VelinoStudio.Updater
             }
             if (result)
             {
-                WriteLog_Information("\t\t，文件：{0} 信息与服务器不一致，需要更新", checkFile);
+                WriteLog_Information("\t\t文件：{0} 信息与服务器不一致，需要更新", checkFile);
             }
             else
             {
-                WriteLog_Information("\t\t，文件：{0} 信息与服务器一致，不需要更新", checkFile);
+                WriteLog_Information("\t\t文件：{0} 信息与服务器一致，不需要更新", checkFile);
             }
             return result;
         }
