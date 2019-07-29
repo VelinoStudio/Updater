@@ -15,7 +15,9 @@ namespace VelinoStudio.Updater
         {
             bool result = false;
             //Console.WriteLine($"文件名：{updateFileInfo.FileName}，路径：{updateFileInfo.FilePath}，版本：{updateFileInfo.FileVersion}，大小：{updateFileInfo.FileSize}，MD5：{updateFileInfo.MD5HashStr}，检测方式：{updateFileInfo.VerificationType}");
-            string checkFile = Path.Combine(Environment.CurrentDirectory, updateFileInfo.FilePath);
+            string fileName = updateFileInfo.FilePath;
+            if(fileName.StartsWith(@"\")) fileName= fileName.Trim('\\');
+            string checkFile = Path.Combine(Environment.CurrentDirectory, fileName);
             if (File.Exists(checkFile))
             {
                 if (updateFileInfo.VerificationType == VerificationType.Version)
