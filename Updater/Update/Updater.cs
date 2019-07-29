@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace VelinoStudio.Updater
 {
@@ -24,7 +25,7 @@ namespace VelinoStudio.Updater
             }
             UpdateUrl = updateUrl;
             this.updateConfig = updateConfig;
-        } 
+        }
 
         public void ClearOldFile(string directory)
         {
@@ -42,20 +43,20 @@ namespace VelinoStudio.Updater
             }
         }
         public event EventHandler<UpdateArgs> UpdateProgressing;
-        public DialogResult CheckUpdate(Form parentForm)
+        public DialogResult CheckUpdate(Form parentForm, out Dictionary<string, string> configurations)
         {
             try
             {
-                return CheckUpdate<Form_FindedUpdate>(parentForm);
+                return CheckUpdate<Form_FindedUpdate>(parentForm, out configurations);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Common.WriteLog_Error(ex);
                 throw ex;
             }
-            
+
         }
-        public DialogResult CheckUpdate<T>(Form parentForm) where T : UpdateForm, IUpdateForm, new()
+        public DialogResult CheckUpdate<T>(Form parentForm, out Dictionary<string, string> configurations) where T : UpdateForm, IUpdateForm, new()
         {
             ClearOldFile(Environment.CurrentDirectory);
             bool result = false;
@@ -91,6 +92,7 @@ namespace VelinoStudio.Updater
 
                 if (result)
                 {
+                    configurations = updateInfo.Configurations;
                     using (UpdateForm updateForm = new T())
                     {
                         Common.WriteLog_Information("实例化更新窗体，窗体类型：{0}", typeof(T).AssemblyQualifiedName);
@@ -125,6 +127,6 @@ namespace VelinoStudio.Updater
             }
         }
 
-        
+
     }
 }
