@@ -89,10 +89,10 @@ namespace VelinoStudio.Updater
                     }
                 }
 
-                configurations = updateInfo.Configurations;
+                configurations = null;
                 if (result)
                 {
-                    
+                    configurations = updateInfo.Configurations;
                     using (UpdateForm updateForm = new T())
                     {
                         Common.WriteLog_Information("实例化更新窗体，窗体类型：{0}", typeof(T).AssemblyQualifiedName);
