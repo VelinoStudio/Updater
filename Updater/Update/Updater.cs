@@ -118,6 +118,20 @@ namespace VelinoStudio.Updater
 
         }
 
+        public DialogResult CheckUpdate(Form parentForm)
+        {
+            try
+            {
+                return CheckUpdate<Form_FindedUpdate>(parentForm, out Dictionary<string, string> configurations);
+            }
+            catch (Exception ex)
+            {
+                Common.WriteLog_Error(ex);
+                throw ex;
+            }
+
+        }
+
         public DialogResult CheckUpdate(Form parentForm, out Dictionary<string, string> configurations)
         {
             try
