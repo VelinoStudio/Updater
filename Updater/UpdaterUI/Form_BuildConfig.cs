@@ -73,7 +73,13 @@ namespace VelinoStudio.Updater.UpdaterUI
                         MessageBox.Show($"未包含主程序 {Form_UpdateConfig.MainExe}");
                         return;
                     }
-                    versionInfos.Add(new VersionInfo() { Index = versionInfos.Count + 1, Version = fileInfo.FileVersion, UpdateDescribe = richTextBox1.Text });
+                    versionInfos.Add(new VersionInfo()
+                    {
+                        Index = versionInfos.Count + 1,
+                        Version = fileInfo.FileVersion,
+                        UpdateDescribe = richTextBox1.Text,
+                        UpdateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
+                    });
                     VersionInfo[] vis = versionInfos.ToArray();
                     Array.Sort(vis);
                     newUpdateInfo.VersionInfos = vis;

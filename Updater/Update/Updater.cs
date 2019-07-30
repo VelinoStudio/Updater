@@ -34,7 +34,7 @@ namespace VelinoStudio.Updater
                     Array.Sort(_UpdateInfo.VersionInfos);
                     VersionInfo versionInfo = _UpdateInfo.VersionInfos[_UpdateInfo.VersionInfos.Length - 1];
                     StringBuilder versionSB = new StringBuilder();
-                    versionSB.AppendLine($"最新更新 - 主文件版本：{versionInfo.Version}");
+                    versionSB.AppendLine($"最新更新 - 主文件版本：{versionInfo.Version}，更新时间：{versionInfo.UpdateDate}");
                     versionSB.AppendLine();
                     versionSB.AppendLine(versionInfo.UpdateDescribe);
                     versionSB.AppendLine();
@@ -43,7 +43,7 @@ namespace VelinoStudio.Updater
                     for (int versionIndex = _UpdateInfo.VersionInfos.Length - 2; versionIndex >= 0; versionIndex--)
                     {
                         versionSB.AppendLine();
-                        versionSB.AppendLine($"历史更新 - 主文件版本：{_UpdateInfo.VersionInfos[versionIndex].Version}");
+                        versionSB.AppendLine($"历史更新 - 主文件版本：{_UpdateInfo.VersionInfos[versionIndex].Version}，更新时间：{_UpdateInfo.VersionInfos[versionIndex].UpdateDate}");
                         versionSB.AppendLine();
                         versionSB.AppendLine(_UpdateInfo.VersionInfos[versionIndex].UpdateDescribe);
                         versionSB.AppendLine();
