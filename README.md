@@ -1,7 +1,7 @@
 # Updater
 更新器
 
-下载：https://github.com/VelinoStudio/Updater/releases/download/1.0.7150.1212/UpdateUI.zip
+下载：https://github.com/VelinoStudio/Updater/releases/download/1.0.7150.34766/UpdateUI.zip
 
 使用UpdaterUI制作更新配置文件，主要以文件版本为主，MD5为辅。将制作的配置文件与更新的程序下的所有文件原样放入HTTP服务器。
 客户端引用UpdaterUI里的Updater.dll，并调用下面两句即可。
