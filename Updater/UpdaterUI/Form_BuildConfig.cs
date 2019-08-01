@@ -34,7 +34,8 @@ namespace VelinoStudio.Updater.UpdaterUI
                     Array.Sort(VersionInfos);
                     foreach (VersionInfo vi in VersionInfos)
                     {
-                        richTextBox1.AppendText(vi.Version + Environment.NewLine);
+
+                        richTextBox1.AppendText($"主文件版本：{vi.Version}，更新时间：{vi.UpdateDate}" + Environment.NewLine);
                         richTextBox1.AppendText(vi.UpdateDescribe + Environment.NewLine);
                         richTextBox1.AppendText(Environment.NewLine);
                     }
@@ -77,7 +78,7 @@ namespace VelinoStudio.Updater.UpdaterUI
                     {
                         Index = versionInfos.Count + 1,
                         Version = fileInfo.FileVersion,
-                        UpdateDescribe = richTextBox1.Text,
+                        UpdateDescribe = richTextBox1.Text.Replace("\n","\r\n"),
                         UpdateDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
                     });
                     VersionInfo[] vis = versionInfos.ToArray();
@@ -95,7 +96,11 @@ namespace VelinoStudio.Updater.UpdaterUI
             if (comboBox1.SelectedIndex >= 0)
             {
                 UpdateFileInfo fileInfo = comboBox1.SelectedItem as UpdateFileInfo;
-                richTextBox1.AppendText($"文件名：{fileInfo.FileName}，文件版本：{fileInfo.FileVersion}");
+                if (richTextBox1.SelectionLength > 0)
+                {
+                    richTextBox1.SelectionStart = richTextBox1.SelectionStart + richTextBox1.SelectionLength;
+                }
+                richTextBox1.SelectedText = $"文件名：{fileInfo.FileName}，文件版本：{fileInfo.FileVersion}";
             }
         }
     }
